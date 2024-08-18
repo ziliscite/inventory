@@ -1,0 +1,61 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"inventory/commands"
+	"inventory/config"
+	"log"
+	"os"
+	"regexp"
+	"strings"
+)
+
+func main() {
+	sc := bufio.NewScanner(os.Stdin)
+	inv, iErr := config.NewInventory()
+	if iErr != nil {
+		log.Fatal(iErr)
+	}
+
+	for {
+		fmt.Printf("inventory > ")
+		sc.Scan()
+		c, p := format(sc.Text())
+		if _, ok := commands.Commands[c]; !ok {
+			fmt.Println("Unknown command: ", c)
+			continue
+		}
+
+		err := commands.Execute(commands.Commands[c], inv, p)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+}
+
+func format(inp string) (string, []string) {
+	if len(inp) == 0 {
+		return "", []string{}
+	}
+
+	// IDK, I asked ChatGPT on this one.
+	// I want to make sure that something that is surrounded with ""
+	// is regarded as 1 element within the array
+	re := regexp.MustCompile(`"([^"]*)"|(\S+)`)
+	matches := re.FindAllStringSubmatch(inp, -1)
+
+	var result []string
+	for _, match := range matches {
+		// Only one of the groups will have a match, pick the first non-empty group
+		for _, group := range match[1:] {
+			if group != "" {
+				result = append(result, group)
+				break
+			}
+		}
+	}
+
+	command := strings.ToLower(result[0])
+	return command, result[1:]
+}
