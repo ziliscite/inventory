@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"inventory/commands"
 	"inventory/config"
-	"log"
 	"os"
 	"regexp"
 	"strings"
@@ -15,7 +14,7 @@ func main() {
 	sc := bufio.NewScanner(os.Stdin)
 	i, iErr := config.NewInventory()
 	if iErr != nil {
-		log.Fatal(iErr)
+		panic(iErr)
 	}
 
 	for {

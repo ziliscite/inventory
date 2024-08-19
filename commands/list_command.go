@@ -2,7 +2,7 @@ package commands
 
 import "inventory/config"
 
-func listCommand(i *config.Inventory, param []string) error {
+func listCommand(i *config.Inventory, p []string) error {
 	err := i.Display()
 	if err != nil {
 		return err

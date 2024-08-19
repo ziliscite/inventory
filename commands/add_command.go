@@ -6,30 +6,39 @@ import (
 	"strconv"
 )
 
-func addCommand(i *config.Inventory, param []string) error {
-	switch len(param) {
+func addCommand(i *config.Inventory, p []string) error {
+	switch len(p) {
 	case 0:
 		return fmt.Errorf("invalid command line arguments: require the item's name as an argument")
 	case 1:
 		return fmt.Errorf("invalid command line arguments: require the item's price as an argument")
 	case 2:
-		param = append(param, "1")
+		p = append(p, "1")
 	}
 
-	name := param[0]
-	amount, aErr := strconv.Atoi(param[1])
+	name := p[0]
+	amount, aErr := strconv.Atoi(p[1])
 	if aErr != nil {
 		return aErr
 	}
 
+	if amount < 1 {
+		return fmt.Errorf("invalid command line arguments: price must be greater than zero")
+	}
+
+	quantity, qErr := strconv.Atoi(p[2])
+	if qErr != nil {
+		return qErr
+	}
+
+	if quantity < 1 {
+		return fmt.Errorf("invalid command line arguments: quantity must be greater than zero")
+	}
+
+	// object creation is expensive, yknow
 	price := config.Currency{
 		Amount: amount,
 		Symbol: config.Symbol,
-	}
-
-	quantity, qErr := strconv.Atoi(param[2])
-	if qErr != nil {
-		return qErr
 	}
 
 	it := config.Item{
