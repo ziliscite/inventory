@@ -31,6 +31,8 @@ func init() {
 		lc.name: lc,
 		ac.name: ac,
 		rc.name: rc,
+		im.name: im,
+		dm.name: dm,
 	}
 }
 

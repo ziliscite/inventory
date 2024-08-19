@@ -68,6 +68,34 @@ func (i *Inventory) Remove(it Item) error {
 	return nil
 }
 
+func (i *Inventory) Increment(it Item, q int) error {
+	i.mu.Lock()
+	defer i.mu.Unlock()
+
+	id := it.Hash()
+	var item Item
+
+	if _, ok := i.Items[id]; !ok {
+		return fmt.Errorf("%s is not in the inventory", it.Name)
+	} else {
+		item = i.Items[id]
+	}
+
+	err := item.Increment(q)
+	if err != nil {
+		return err
+	}
+
+	i.Items[id] = item
+	sErr := helper.SaveToJSON(i.path, i)
+	if sErr != nil {
+		return fmt.Errorf(sErr.Error())
+	}
+
+	fmt.Println("successfully incremented", it.Name, "by", q, "to the inventory")
+	return nil
+}
+
 func (i *Inventory) Display() error {
 	// honestly, it could be formatted better, but it works for now
 	fmt.Println("items: ")
