@@ -26,6 +26,7 @@ func removeCommand(i *config.Inventory, p []string) error {
 
 var rc = Command{
 	name:        "remove",
-	description: "remove an new item from the inventory\n\texample: remove [item's name]",
+	description: "remove an new item from the inventory",
+	example:     "remove [item's name]",
 	command:     removeCommand,
 }

@@ -6,6 +6,10 @@ import (
 	"strings"
 )
 
+// maybe use this to reinforce the generics
+type Name string
+type Quantity int
+
 type Item struct {
 	Name     string   `json:"name"`
 	Quantity int      `json:"quantity"`
@@ -27,10 +31,6 @@ func (i *Item) Increment(q int) error {
 	i.Quantity += q
 	return nil
 }
-
-// I've tried countless number of times to erase the white spaces
-// between these things below, but IntelliJ seems to not like it.
-// They always add it back in, so I figured, why bother?
 
 type currencySymbol string
 

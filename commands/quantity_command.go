@@ -27,19 +27,12 @@ func validateParams(p []string) (string, int, error) {
 	return name, quantity, nil
 }
 
-func incrementMethod(i *config.Inventory, p []string) error {
-	// in this one we should check if the item exists in our inventory
-
-	name, quantity, err := validateParams(p)
-	if err != nil {
-		return err
-	}
-
+func quantityMethod(i *config.Inventory, n string, q int) error {
 	it := config.Item{
-		Name: name,
+		Name: n,
 	}
 
-	err = i.Increment(it, quantity)
+	err := i.Increment(it, q)
 	if err != nil {
 		return err
 	}
@@ -47,19 +40,13 @@ func incrementMethod(i *config.Inventory, p []string) error {
 	return nil
 }
 
-func decrementMethod(i *config.Inventory, p []string) error {
-	// and in this one, check if the quantity is not lower than 1 post-decrease
-
+func incrementCommand(i *config.Inventory, p []string) error {
 	name, quantity, err := validateParams(p)
 	if err != nil {
 		return err
 	}
 
-	it := config.Item{
-		Name: name,
-	}
-
-	err = i.Increment(it, -quantity)
+	err = quantityMethod(i, name, quantity)
 	if err != nil {
 		return err
 	}
@@ -67,14 +54,30 @@ func decrementMethod(i *config.Inventory, p []string) error {
 	return nil
 }
 
-var im = Command{
+func decrementCommand(i *config.Inventory, p []string) error {
+	name, quantity, err := validateParams(p)
+	if err != nil {
+		return err
+	}
+
+	err = quantityMethod(i, name, -quantity)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var ic = Command{
 	name:        "increase",
-	description: "increase the quantity of an item (in the inventory) by n-input amount\n\tdefault increment value is 1 if not specified\n\texample: increase [item's name] [amount]",
-	command:     incrementMethod,
+	description: "increase the quantity of an item in the inventory",
+	example:     "increase [item's name] [quantity]",
+	command:     incrementCommand,
 }
 
-var dm = Command{
+var dc = Command{
 	name:        "decrease",
-	description: "decrease the quantity of an item (in the inventory) by n-input amount\n\tdefault decrement value is 1 if not specified\n\texample: decrease [item's name] [amount]",
-	command:     decrementMethod,
+	description: "decrease the quantity of an item in the inventory",
+	example:     "decrease [item's name] [quantity]",
+	command:     decrementCommand,
 }

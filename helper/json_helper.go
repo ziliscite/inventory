@@ -73,7 +73,3 @@ func LoadFromJSON(fileName string, key interface{}) error {
 
 	return nil
 }
-
-// Yeah, I copied both the LoadFromJSON and SaveToJSON method from somewhere,
-// but I made my fair share of adjustment so that it would fit in my code.
-// So, hey, why not

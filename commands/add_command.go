@@ -56,6 +56,7 @@ func addCommand(i *config.Inventory, p []string) error {
 
 var ac = Command{
 	name:        "add",
-	description: "add a new item to the inventory\n\tquantity is automatically 1 if not specified\n\texample: add [item's name] [price] [quantity]",
+	description: "add a new item to the inventory",
+	example:     "add [item's name] [price] [quantity]",
 	command:     addCommand,
 }

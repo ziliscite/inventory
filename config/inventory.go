@@ -62,8 +62,6 @@ func (i *Inventory) Remove(it Item) error {
 		return fmt.Errorf(err.Error())
 	}
 
-	// listen, I know that this looks like a code repetition,
-	// but like, 80% of the codes here are error handling, we would have to do it regardless
 	fmt.Println("successfully deleted " + it.Name + " from the inventory")
 	return nil
 }
@@ -97,7 +95,6 @@ func (i *Inventory) Increment(it Item, q int) error {
 }
 
 func (i *Inventory) Display() error {
-	// honestly, it could be formatted better, but it works for now
 	fmt.Println("items: ")
 	for _, v := range i.Items {
 		fmt.Println("\tname: ", v.Name)
