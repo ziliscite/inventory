@@ -1,9 +1,23 @@
 package config
 
+import (
+	"crypto/sha256"
+	"fmt"
+	"strings"
+)
+
 type Item struct {
 	Name     string   `json:"name"`
 	Quantity int      `json:"quantity"`
 	Price    Currency `json:"price"`
+}
+
+func (i Item) Hash() string {
+	h := sha256.New()
+	h.Write([]byte(strings.ToLower(i.Name)))
+	bs := h.Sum(nil)
+	hexString := fmt.Sprintf("%x", bs)
+	return hexString
 }
 
 // I've tried countless number of times to erase the white spaces

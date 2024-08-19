@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"sync"
 )
 
@@ -84,16 +83,18 @@ func (i *Inventory) Add(it Item) error {
 		return fmt.Errorf("Failed to open file: %v\n", err)
 	}
 
-	lName := strings.ToLower(it.Name)
-	if v, ok := i.Items[lName]; ok {
+	id := it.Hash()
+	if v, ok := i.Items[id]; ok {
 		// should've checked it with something like, id?
 		// i.Items.id == item.id or something
+
+		// guess what
 		return fmt.Errorf("%s is already in the inventory\nuse increase or update command instead", v.Name)
 	}
 
 	// I know, "Why the short variable name?", same, man, same
 	// However, I don't make the rules, Gophers are deranged
-	i.Items[it.Name] = it
+	i.Items[id] = it
 
 	err = saveToJSON(file, i)
 	if err != nil {
@@ -112,8 +113,8 @@ func (i *Inventory) Add(it Item) error {
 func (i *Inventory) Display() error {
 	// honestly, it could be formatted better, but it works for now
 	fmt.Println("items: ")
-	for k, v := range i.Items {
-		fmt.Println("\tname: ", k)
+	for _, v := range i.Items {
+		fmt.Println("\tname: ", v.Name)
 		fmt.Println("\tprice: ", v.Price.Amount, "", v.Price.Symbol)
 		fmt.Println("\tquantity", v.Quantity)
 		fmt.Println()

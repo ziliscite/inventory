@@ -14,8 +14,8 @@ type Command struct {
 // We have abstraction at home
 // The abstraction in question:
 
-func Execute(cmd Command, inventory *config.Inventory, param []string) error {
-	err := cmd.command(inventory, param)
+func (c Command) Execute(inventory *config.Inventory, param []string) error {
+	err := c.command(inventory, param)
 	if err != nil {
 		return fmt.Errorf(err.Error())
 	}

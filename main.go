@@ -13,7 +13,7 @@ import (
 
 func main() {
 	sc := bufio.NewScanner(os.Stdin)
-	inv, iErr := config.NewInventory()
+	i, iErr := config.NewInventory()
 	if iErr != nil {
 		log.Fatal(iErr)
 	}
@@ -27,7 +27,7 @@ func main() {
 			continue
 		}
 
-		err := commands.Execute(commands.Commands[c], inv, p)
+		err := commands.Commands[c].Execute(i, p)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
