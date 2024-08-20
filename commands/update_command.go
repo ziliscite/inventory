@@ -1,20 +1,61 @@
 package commands
 
-import "inventory/config"
+import (
+	"fmt"
+	"inventory/config"
+	"strconv"
+)
 
 func updateCommand(i *config.Inventory, p []string) error {
-	err := updateAttribute(i, p[1], 2)
+	na, err := strconv.Atoi(p[2])
+	if err != nil {
+		// errors probably "oh, its not an int", bla bla
+		// so we are going to ignore it.
+	}
+
+	err = updateAttribute(i, p[0], p[1], na)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-type Attribute interface {
-	~string | ~int
-}
+func updateAttribute[T int | string](i *config.Inventory, n, a string, na T) error {
+	it, err := i.GetItem(n)
+	if err != nil {
+		return err
+	}
 
-func updateAttribute[T Attribute](i *config.Inventory, a string, n T) error {
+	itd := it.Hash()
+
+	switch a {
+	case "name":
+		if name, ok := any(na).(string); ok {
+			it.Name = name
+		} else {
+			return fmt.Errorf("expected a string for name")
+		}
+	case "quantity":
+		if quantity, ok := any(na).(int); ok {
+			it.Quantity = quantity
+		} else {
+			return fmt.Errorf("expected an int for quantity")
+		}
+	case "price":
+		if price, ok := any(na).(int); ok {
+			it.Quantity = price
+		} else {
+			return fmt.Errorf("expected an int for price")
+		}
+	default:
+		return fmt.Errorf("unknown attribute: %s", a)
+	}
+
+	err = i.Update(itd, it)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

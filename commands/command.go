@@ -29,6 +29,7 @@ func init() {
 		rc.name: rc,
 		ic.name: ic,
 		dc.name: dc,
+		uc.name: uc,
 	}
 }
 

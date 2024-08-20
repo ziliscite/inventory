@@ -46,6 +46,25 @@ func (i *Inventory) Add(it Item) error {
 	return nil
 }
 
+func (i *Inventory) Update(itd string, nit Item) error {
+	i.mu.Lock()
+	defer i.mu.Unlock()
+
+	pit := i.Items[itd]
+	delete(i.Items, itd)
+
+	id := nit.Hash()
+	i.Items[id] = nit
+
+	err := helper.SaveToJSON(i.path, i)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	fmt.Println("successfully updated", pit, "into", nit)
+	return nil
+}
+
 func (i *Inventory) Remove(it Item) error {
 	i.mu.Lock()
 	defer i.mu.Unlock()
@@ -94,8 +113,21 @@ func (i *Inventory) Increment(it Item, q int) error {
 	return nil
 }
 
-func (i *Inventory) Load(n string) *Item {
+// GetItem takes an item's name and returns a copy of the item if it exists
+func (i *Inventory) GetItem(n string) (Item, error) {
 	i.mu.Lock()
 	defer i.mu.Unlock()
-	return nil
+
+	it := Item{Name: n}
+
+	id := it.Hash()
+	var item Item
+
+	if _, ok := i.Items[id]; !ok {
+		return it, fmt.Errorf("%s is not in the inventory", it.Name)
+	} else {
+		item = i.Items[id]
+	}
+
+	return item, nil
 }

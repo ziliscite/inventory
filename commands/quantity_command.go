@@ -15,9 +15,9 @@ func validateParams(p []string) (string, int, error) {
 	}
 
 	name := p[0]
-	quantity, aErr := strconv.Atoi(p[1])
-	if aErr != nil {
-		return "", 0, aErr
+	quantity, err := strconv.Atoi(p[1])
+	if err != nil {
+		return "", 0, err
 	}
 
 	if quantity < 1 {
