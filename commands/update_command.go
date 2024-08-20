@@ -9,11 +9,11 @@ import (
 func updateCommand(i *config.Inventory, p []string) error {
 	na, err := strconv.Atoi(p[2])
 	if err != nil {
-		// errors probably "oh, its not an int", bla bla
-		// so we are going to ignore it.
+		err = updateAttribute(i, p[0], p[1], p[2])
+	} else {
+		err = updateAttribute(i, p[0], p[1], na)
 	}
 
-	err = updateAttribute(i, p[0], p[1], na)
 	if err != nil {
 		return err
 	}

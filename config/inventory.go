@@ -50,10 +50,16 @@ func (i *Inventory) Update(itd string, nit Item) error {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
+	id := nit.Hash()
+	// if id == itd, it means that we update the quantity or price
+	// so, it is allowed to be already in the inventory
+	if v, ok := i.Items[id]; ok && id != itd {
+		return fmt.Errorf("%s is already in the inventory", v.Name)
+	}
+
 	pit := i.Items[itd]
 	delete(i.Items, itd)
 
-	id := nit.Hash()
 	i.Items[id] = nit
 
 	err := helper.SaveToJSON(i.path, i)
