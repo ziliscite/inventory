@@ -43,7 +43,7 @@ func updateAttribute[T int | string](i *config.Inventory, n, a string, na T) err
 		}
 	case "price":
 		if price, ok := any(na).(int); ok {
-			it.Quantity = price
+			it.Price = config.Currency{Symbol: config.Symbol, Amount: price}
 		} else {
 			return fmt.Errorf("expected an int for price")
 		}
