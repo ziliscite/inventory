@@ -8,15 +8,19 @@ import (
 
 func updateCommand(i *config.Inventory, p []string) error {
 	na, err := strconv.Atoi(p[2])
-	if err != nil {
-		err = updateAttribute(i, p[0], p[1], p[2])
-	} else {
+	if err == nil {
+		if na < 0 {
+			return fmt.Errorf("quantity or price must be greater than zero")
+		}
 		err = updateAttribute(i, p[0], p[1], na)
+	} else {
+		err = updateAttribute(i, p[0], p[1], p[2])
 	}
 
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

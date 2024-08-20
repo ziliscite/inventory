@@ -25,8 +25,8 @@ func (i *Item) Hash() string {
 }
 
 func (i *Item) Increment(q int) error {
-	if v := i.Quantity + q; v < 1 {
-		return fmt.Errorf("item's quantity cannot be less than 1")
+	if v := i.Quantity + q; v < 0 {
+		return fmt.Errorf("item's quantity cannot be less than 0")
 	}
 	i.Quantity += q
 	return nil
