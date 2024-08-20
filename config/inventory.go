@@ -94,13 +94,8 @@ func (i *Inventory) Increment(it Item, q int) error {
 	return nil
 }
 
-func (i *Inventory) Display() error {
-	fmt.Println("items: ")
-	for _, v := range i.Items {
-		fmt.Println("\tname: ", v.Name)
-		fmt.Println("\tprice: ", v.Price.Amount, "", v.Price.Symbol)
-		fmt.Println("\tquantity", v.Quantity)
-		fmt.Println()
-	}
+func (i *Inventory) Load(n string) *Item {
+	i.mu.Lock()
+	defer i.mu.Unlock()
 	return nil
 }

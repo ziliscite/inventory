@@ -13,7 +13,7 @@ func addCommand(i *config.Inventory, p []string) error {
 	case 1:
 		return fmt.Errorf("invalid command line arguments: require the item's price as an argument")
 	case 2:
-		p = append(p, "1")
+		p = append(p, strconv.Itoa(1))
 	}
 
 	name := p[0]
